@@ -38,10 +38,10 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo "🐳 Building Docker image: ${IMAGE_NAME}:${IMAGE_TAG}"
-                bat ' ' '
+                bat '''
                     docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
                     docker tag  ${IMAGE_NAME}:${IMAGE_TAG} ${IMAGE_NAME}:latest
-                ' ' '
+                '''
             }
         }
 
@@ -54,11 +54,11 @@ pipeline {
                     usernameVariable: 'DH_USER',
                     passwordVariable: 'DH_PASS'
                 )]) {
-                    bat ' ' '
+                    bat '''
                         echo "$DH_PASS" | docker login -u "$DH_USER" --password-stdin
                         docker pubat ${IMAGE_NAME}:${IMAGE_TAG}
                         docker pubat ${IMAGE_NAME}:latest
-                    ' ' '
+                    '''
                 }
             }
         
