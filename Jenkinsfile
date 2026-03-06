@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME         = "krubatnaad/web-app"
+        IMAGE_NAME         = "krushnaad/web-app"
         IMAGE_TAG          = "${BUILD_NUMBER}"
     }
 
@@ -38,30 +38,30 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo "🐳 Building Docker image: ${IMAGE_NAME}:${IMAGE_TAG}"
-                bat '''
+                bat """
                     docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
                     docker tag  ${IMAGE_NAME}:${IMAGE_TAG} ${IMAGE_NAME}:latest
-                '''
+                  """
             }
         }
 
         // ── Stage 5: Pubat to DockerHub ─────────────────────
-        stage('Pubat to DockerHub') {
+        stage('Push to DockerHub') {
             steps {
-                echo '🚀 Pubating image to DockerHub...'
+                echo '🚀 Pushing image to DockerHub...'
                 withCredentials([usernamePassword(
                     credentialsId: 'DOCKERHUB_CREDENTIALS',
                     usernameVariable: 'DH_USER',
                     passwordVariable: 'DH_PASS'
                 )]) {
                     bat '''
-                        echo "$DH_PASS" | docker login -u "$DH_USER" --password-stdin
-                        docker pubat ${IMAGE_NAME}:${IMAGE_TAG}
-                        docker pubat ${IMAGE_NAME}:latest
+                        echo %DH_PASS%| docker login -u %DH_USER% --password-stdin
+                        docker push ${IMAGE_NAME}:${IMAGE_TAG}
+                        docker push ${IMAGE_NAME}:latest
                     '''
                 }
             }
         
 		}
-
-    }
+	}	
+}
