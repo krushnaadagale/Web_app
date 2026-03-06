@@ -62,7 +62,7 @@ app.delete('/todos/:id', (req, res) => {
   if (index === -1) return res.status(404).json({ error: 'Todo not found' });
 
   todos.splice(index, 1);
-  res.json({ message: 'Todo deleted' });
+  res.json({ message: 'Todo delete' });
 });
 
 // Start server
